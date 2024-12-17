@@ -1,0 +1,40 @@
+const int trigPin = 9;     // Trigger pin of ultrasonic sensor
+const int echoPin = 10;    // Echo pin of ultrasonic sensor
+const int buzzerPin = 8;   // Buzzer pin
+
+float duration, distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(buzzerPin, OUTPUT); // Configure buzzer pin as output
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Send a 10us pulse to trigger pin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Measure the pulse duration on echo pin
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance in cm
+  distance = (duration * 0.0343) / 2;
+
+  Serial.print("Distance: ");
+  Serial.println(distance);
+
+  // Turn on the buzzer if the distance is less than 10 cm
+  if (distance > 0 && distance <= 10) {
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(buzzerPin, LOW);
+  }
+
+  delay(100);
+}
